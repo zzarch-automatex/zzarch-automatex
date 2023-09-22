@@ -1,0 +1,17 @@
+jobs:
+  auto_request_review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the assignee and pull request number
+          assignee=$(jq -r ".pull_request.assignee.login" $GITHUB_EVENT_PATH)
+          pull_request_number=$(jq -r ".pull_request.number" $GITHUB_EVENT_PATH)
+          
+          # Request review from a specific reviewer
+          reviewer="waleedahmd308r"
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+            -d "{\"reviewers\":[\"$reviewer\"]}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$pull_request_number/requested_reviewers"
