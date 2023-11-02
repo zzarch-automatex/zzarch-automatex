@@ -1,0 +1,35 @@
+---
+- name: Deploy Rocket.Chat
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - g++
+        - build-essential
+        - git
+        - curl
+        - python-minimal
+
+    - name: Install Meteor
+      command: "curl https://install.meteor.com/?release=x2.13.3 | sh"
+
+    - name: Install Yarn globally
+      command: "npm install --global yarn"
+
+    - name: Clone Rocket.Chat repository
+      git:
+        repo: https://github.com/RocketChat/Rocket.Chat
+        dest: /home/muhammad/Rocket.Chat
+
+    - name: Change directory to Rocket.Chat
+      shell: /home/muhammad/Rocket.Chat
+
+    - name: Install project dependencies using Yarn
+      shell: "yarn"
+
+    - name: Run the Rocket.Chat development server
+      shell: "yarn start"
