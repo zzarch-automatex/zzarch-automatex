@@ -1,0 +1,11 @@
+- Vagrant is easy if everything is defined in a moduler way
+
+- Ansible and Vagrant can work together if they are configured properly that way
+
+- Using advance features does not make the project more effiicient
+but they are more useful while dealing with infrastructure management
+
+- Many different applications can work together with minimum hassle if 
+infrastructure is well defined
+
+- Using docker while configuration was much more easier
