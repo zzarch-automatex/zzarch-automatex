@@ -1,0 +1,23 @@
+- hosts: rocketchat_reactnative_servers
+  become: yes
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Install Node.js and npm
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install Yarn (or npm if preferred)
+      apt:
+        name: yarn  
+        state: present
+
+   
