@@ -1,32 +1,27 @@
-# Vagrantfile
-
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/focal64"  # Use a suitable base box
+  # Default base box
+  config.vm.box = "ubuntu/focal64"
 
-  # AppFlowy
-  config.vm.define "appflowy" do |appflowy|
-    appflowy.vm.network "private_network", ip: "192.168.33.10"
-    appflowy.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/appflowy_playbook.yml"
-      # Other Ansible configurations for AppFlowy
+  # Define a function to configure each VM
+  def configure_vm(config, name, ip, playbook)
+    config.vm.define name do |vm|
+      vm.vm.network "private_network", ip: ip
+      vm.vm.provision "ansible" do |ansible|
+        ansible.playbook = "ansible/#{playbook}"
+        # Add other Ansible configurations here
+      end
     end
   end
 
-  # Rocket.Chat.ReactNative
-  config.vm.define "rocketchat_reactnative" do |rocketchat_reactnative|
-    rocketchat_reactnative.vm.network "private_network", ip: "192.168.33.11"
-    rocketchat_reactnative.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/rocketchat_reactnative_playbook.yml"
-      # Other Ansible configurations for Rocket.Chat.ReactNative
-    end
-  end
+  # List of VMs to provision
+  vms = [
+    { name: "appflowy", ip: "192.168.33.10", playbook: "appflowy_playbook.yml" },
+    { name: "rocketchat_reactnative", ip: "192.168.33.11", playbook: "rocketchat_reactnative_playbook.yml" },
+    { name: "rocketchat", ip: "192.168.33.12", playbook: "rocketchat_playbook.yml" }
+  ]
 
-  # Rocket.Chat
-  config.vm.define "rocketchat" do |rocketchat|
-    rocketchat.vm.network "private_network", ip: "192.168.33.12"
-    rocketchat.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/rocketchat_playbook.yml"
-      # Other Ansible configurations for Rocket.Chat
-    end
+  # Iterate over the VM list and configure each one
+  vms.each do |vm_config|
+    configure_vm(config, vm_config[:name], vm_config[:ip], vm_config[:playbook])
   end
 end

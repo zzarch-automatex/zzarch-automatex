@@ -1,4 +1,4 @@
-- hosts: rocketchat_reactnative_servers
+- hosts: rocketchat_reactnative
   become: yes
   tasks:
     - name: Update apt package cache
@@ -15,9 +15,27 @@
         name: nodejs
         state: present
 
-    - name: Install Yarn (or npm if preferred)
+    - name: Install Yarn 
       apt:
         name: yarn  
         state: present
 
-   
+    - name: Clone Rocket.Chat.ReactNative repository
+      git:
+        repo: https://github.com/RocketChat/Rocket.Chat.ReactNative.git
+        dest: /path/to/destination/Rocket.Chat.ReactNative  # Adjust the destination path as needed
+        version: master  # or specify a specific branch/tag if needed
+
+    - name: Change to the project directory
+      become: no  # Run as the default user, not root
+      shell: cd /path/to/destination/Rocket.Chat.ReactNative
+
+    - name: Install project dependencies
+      become: no  # Run as the default user, not root
+      shell: yarn install  # or npm install if preferred
+
+    - name: Start the project
+      become: no  # Run as the default user, not root
+      shell: yarn start  # Adjust the command as needed
+
+    # Add more tasks as needed for your project setup

@@ -1,0 +1,22 @@
+# /project/docker-compose.yml
+version: '3.8'
+
+services:
+  appflowy:
+    extends:
+      file: ./appflowy/docker-compose.yml
+      service: appflowy
+
+  rocketchat_reactnative:
+    extends:
+      file: ./Rocket.Chat.ReactNative/docker-compose.yml
+      service: rocketchat_reactnative
+
+  rocketchat:
+    extends:
+      file: ./rocketchat/docker-compose.yml
+      service: rocketchat
+
+networks:
+  project_network:
+    external: true

@@ -1,0 +1,6 @@
+# /project/common/shared.docker-compose.yml
+version: '3.8'
+
+networks:
+  project_network:
+    external: true
